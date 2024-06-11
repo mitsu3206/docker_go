@@ -1,0 +1,65 @@
+# version: '3.9'
+
+services:
+  go-dev:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+      target: dev
+    image: go-dev
+    container_name: go-dev
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: go
+      DB_USER: user
+      DB_PASS: password
+      # TZ: 'Asia/Tokyo'  # timezoneをenvで設定する場合、コメントを外す。
+    volumes:
+      - type: bind
+        source: ./
+        target: /go/src
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # go-deploy:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/app/Dockerfile
+  #     target: deploy
+  #   image: go-deploy
+  #   container_name: go-deploy
+  #   ports:
+  #     - "8080:8080"
+  #   tty: true
+  #   depends_on:
+  #     - db
+
+  db:
+    image: mysql:latest  # MySQLのバージョンを指定する。
+    container_name: db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: go
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - db-data:/var/lib/mysql:rw
+      - ./docker/db/config/my.cnf:/etc/mysql/conf.d/my.cnf
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db-data:
+    name: "go-data"
