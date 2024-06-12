@@ -4,6 +4,10 @@ Goモジュールを新規インストールする。
 ```go
 go mod init example/hello
 ```
+または
+```bash
+docker container exec go-dev go mod init example/hello
+```
 [Go公式ドキュメント](https://go.dev/doc/ "Go User Manual")
 
 ## 必要なモジュールを追加する
