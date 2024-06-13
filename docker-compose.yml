@@ -52,7 +52,6 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - db-data:/var/lib/mysql:rw
-      - ./docker/db/config/my.cnf:/etc/mysql/conf.d/my.cnf
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 2s
