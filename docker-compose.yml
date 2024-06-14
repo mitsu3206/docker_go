@@ -4,7 +4,7 @@ services:
   go-dev:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
+      dockerfile: ./docker/app/Dockerfile
       target: dev
     image: go-dev
     container_name: go-dev
@@ -20,7 +20,7 @@ services:
     volumes:
       - type: bind
         source: ./
-        target: /go/src
+        target: /go/src/dev
     tty: true
     depends_on:
       db:
@@ -29,7 +29,7 @@ services:
   # go-deploy:
   #   build:
   #     context: .
-  #     dockerfile: docker/app/Dockerfile
+  #     dockerfile: ./docker/app/Dockerfile
   #     target: deploy
   #   image: go-deploy
   #   container_name: go-deploy

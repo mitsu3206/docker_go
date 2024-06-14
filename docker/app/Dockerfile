@@ -3,20 +3,18 @@
 # https://hub.docker.com/_/golang
 FROM golang:latest AS builder
 
-WORKDIR /go/src
-# COPY go.mod ./
-# COPY go.sum ./
-# RUN go mod download
-# COPY *.go ./
-# RUN go build -o /main
+WORKDIR /go/src/dev
+COPY . .
+RUN go mod download
+RUN go build -o /main
 
 
 # Local stage
 FROM builder AS dev
 
-WORKDIR /go/src
+WORKDIR /go/src/dev
 RUN go install github.com/air-verse/air@latest
-# ENTRYPOINT [ "air" ]
+ENTRYPOINT [ "air" ]
 
 
 # Deploy stage
