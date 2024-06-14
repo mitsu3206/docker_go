@@ -6,7 +6,7 @@ FROM golang:latest AS builder
 WORKDIR /go/src/dev
 COPY . .
 RUN go mod download
-RUN go build -o /main
+RUN go build -o /main ./cmd/go-dev
 
 
 # Local stage
